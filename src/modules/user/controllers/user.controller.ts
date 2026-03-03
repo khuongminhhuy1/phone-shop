@@ -1,9 +1,9 @@
 import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common'
-import { UserService } from '../services/user.services.js'
-import { CreateUserDto, UpdateUserDto } from 'src/modules/user/dto/dto.js'
-import { USER_MESSAGES } from 'src/utils/messages.js'
+import { UserService } from '../services/user.services'
+import { CreateUserDto, UpdateUserDto } from 'src/modules/user/dto/dto'
+import { USER_MESSAGES } from 'src/utils/messages'
 
-@Controller('users')
+@Controller('user')
 export class UserController {
   constructor(private userService: UserService) {}
 
@@ -14,28 +14,32 @@ export class UserController {
     }
   }
   @Post()
-  create(@Body() body: CreateUserDto) {
+  async create(@Body() body: CreateUserDto) {
+    await this.userService.create(body)
     return {
       message: USER_MESSAGES.USER_CREATED,
       user: body,
     }
   }
   @Put(':id')
-  update(@Body() body: UpdateUserDto, @Param('id') id: number) {
+  async update(@Body() body: UpdateUserDto, @Param('id') id: number) {
+    await this.userService.update(body, id)
     return {
       message: USER_MESSAGES.USER_UPDATED,
-      user: this.userService.update(body, id),
+      user: await this.userService.findOne(id),
     }
   }
   @Delete(':id')
-  delete(@Param('id') id: number) {
+  async delete(@Param('id') id: number) {
+    await this.userService.delete(id)
     return {
       message: USER_MESSAGES.USER_DELETED,
       id,
     }
   }
   @Get(':id')
-  findOne(@Param('id') id: number) {
+  async findOne(@Param('id') id: number) {
+    await this.userService.findOne(id)
     return {
       user: this.userService.findOne(id),
     }

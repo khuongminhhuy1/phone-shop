@@ -1,4 +1,4 @@
-import { IsEmail, isNotEmpty, IsNotEmpty, MinLength } from 'class-validator'
+import { IsEmail, IsNotEmpty, MinLength } from 'class-validator'
 import { USER_ERROR } from '../../../utils/errors.js'
 
 export class CreateUserDto {

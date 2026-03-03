@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
-import { User } from '../../../models/user.entity.js'
-import { CreateUserDto, UpdateUserDto } from '../dto/dto.js'
-import { USER_ERROR } from 'src/utils/errors.js'
-import { USER_MESSAGES } from 'src/utils/messages.js'
+import { User } from '../../../models/user.entity'
+import { CreateUserDto, UpdateUserDto } from '../dto/dto'
+import { USER_ERROR } from 'src/utils/errors'
+import { USER_MESSAGES } from 'src/utils/messages'
 import { NotFoundException } from '@nestjs/common'
 
 @Injectable()
@@ -40,7 +40,6 @@ export class UserService {
       throw new NotFoundException(USER_ERROR.NOT_FOUND)
     }
     await this.userRepository.update({ id }, { ...dto, updatedAt: new Date() })
-
     return await this.userRepository.save(user)
   }
   async delete(id: number): Promise<void> {
