@@ -6,11 +6,13 @@ import { CreateUserDto, UpdateUserDto } from '../dto/dto'
 import { USER_ERROR } from 'src/utils/errors'
 import { USER_MESSAGES } from 'src/utils/messages'
 import { NotFoundException } from '@nestjs/common'
+import { PasswordHashService } from './password-hash.services'
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
+    private passwordHashService: PasswordHashService,
     private userRepository: Repository<User>,
   ) {}
 
@@ -19,11 +21,13 @@ export class UserService {
   }
 
   async create(dto: CreateUserDto): Promise<User> {
-    const user = await this.userRepository.create({
-      ...dto,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+    const hashedPassword = await this.passwordHashService.hashPassword(dto.password)
+    const user = this.userRepository.create({
+      email: dto.email,
+      name: dto.name,
+      password: hashedPassword,
     })
+
     return this.userRepository.save(user)
   }
 
