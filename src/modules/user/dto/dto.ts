@@ -1,5 +1,5 @@
 import { IsEmail, IsNotEmpty, MinLength } from 'class-validator'
-import { USER_ERROR } from '../../../utils/errors.js'
+import { USER_ERROR } from '../../../utils/errors'
 
 export class CreateUserDto {
   @IsNotEmpty({ message: USER_ERROR.EMAIL_REQUIRED })
